@@ -57,3 +57,43 @@
 
 @media (max-width: 780px) { .hero { grid-template-columns: 1fr; min-height: auto; padding: 60px 0; } .countCard { width: min(260px, 100%); } .infoGrid { grid-template-columns: 1fr; } .codeCard { align-items: flex-start; flex-direction: column; } }
 @media (max-width: 560px) { .headerStatus { display: none; } .main { width: min(100% - 24px, 1120px); padding-top: 112px; } .footerTop { align-items: flex-start; flex-direction: column; } .footerGroups { grid-template-columns: 1fr; } }
+
+.goTop {
+    position: fixed;
+    right: 22px;
+    bottom: 22px;
+    z-index: 30;
+    width: 42px;
+    height: 42px;
+    display: grid;
+    place-items: center;
+    color: #eaf2ff;
+    background: rgba(16, 27, 42, .94);
+    border: 1px solid rgba(142, 178, 218, .35);
+    border-radius: 50%;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, .24);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 160ms ease, visibility 160ms ease, border-color 160ms ease, box-shadow 160ms ease, text-shadow 160ms ease;
+}
+
+.goTop.visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.goTop:hover {
+    color: #8bc8ff;
+    border-color: #8bc8ff;
+    box-shadow: 0 0 18px rgba(139, 200, 255, .24);
+    text-shadow: 0 0 9px rgba(139, 200, 255, .7);
+}
+
+@media (max-width: 560px) {
+    .goTop {
+        right: 16px;
+        bottom: 16px;
+    }
+}

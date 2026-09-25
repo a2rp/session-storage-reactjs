@@ -7,7 +7,7 @@ A responsive React page-view counter that persists inside the current browser ta
 - Creates and increments a `page_view` sessionStorage value
 - Displays the current tab session count in a focused dashboard
 - Explains the storage lifecycle with a simple responsive interface
-- Fixed branded header and icon-only footer links
+- Fixed branded header, icon-only footer links, and floating scroll-to-top control
 
 ## Tech stack
 

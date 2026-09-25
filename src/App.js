@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FiBookOpen, FiCode, FiCoffee, FiEye, FiGithub, FiGlobe, FiHeart, FiMail, FiRefreshCw } from "react-icons/fi";
+import { FiBookOpen, FiCode, FiCoffee, FiEye, FiGithub, FiGlobe, FiHeart, FiMail, FiRefreshCw, FiArrowUp } from "react-icons/fi";
 import { FaFacebookF, FaLinkedinIn, FaYoutube } from "react-icons/fa6";
 import "./App.css";
 
@@ -35,12 +35,19 @@ function LinkIcons({ links }) {
 
 function App() {
     const [count, setCount] = useState(0);
+    const [showTop, setShowTop] = useState(false);
 
     useEffect(() => {
         const currentViews = sessionStorage.getItem("page_view");
         const nextViews = currentViews === null ? 1 : Number(currentViews) + 1;
         sessionStorage.setItem("page_view", String(nextViews));
         setCount(nextViews);
+    }, []);
+    useEffect(() => {
+        const updateTopButton = () => setShowTop(window.scrollY > 420);
+        window.addEventListener("scroll", updateTopButton, { passive: true });
+        updateTopButton();
+        return () => window.removeEventListener("scroll", updateTopButton);
     }, []);
 
     const refreshCount = () => {
@@ -89,10 +96,11 @@ function App() {
 
             <footer className="siteFooter">
                 <div className="footerMain">
-                    <div className="footerTop"><strong>Small browser APIs, useful interfaces.</strong><span>Copyright © {new Date().getFullYear()} <a href="https://www.ashishranjan.net/" target="_blank" rel="noopener noreferrer">Ashish Ranjan</a></span></div>
+                    <div className="footerTop"><strong>Small browser APIs, useful interfaces.</strong><span>Copyright {"\u00a9"} {new Date().getFullYear()} <a href="https://www.ashishranjan.net/" target="_blank" rel="noopener noreferrer">Ashish Ranjan</a></span></div>
                     <div className="footerGroups"><div><span>Connect</span><LinkIcons links={connectLinks} /></div><div><span>Support</span><LinkIcons links={supportLinks} /></div></div>
                 </div>
             </footer>
+            <button className={showTop ? "goTop visible" : "goTop"} type="button" onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })} aria-label="Scroll to top" title="Scroll to top"><FiArrowUp aria-hidden="true" /></button>
         </div>
     );
 }
