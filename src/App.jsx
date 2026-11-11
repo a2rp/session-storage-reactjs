@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FiBookOpen, FiCode, FiCoffee, FiEye, FiGithub, FiGlobe, FiHeart, FiMail, FiRefreshCw, FiArrowUp } from "react-icons/fi";
 import { FaFacebookF, FaLinkedinIn, FaYoutube } from "react-icons/fa6";
 import "./App.css";
 
-const publicAsset = (name) => `${process.env.PUBLIC_URL || ""}/${name}`;
+const publicAsset = (name) => `${import.meta.env.BASE_URL}${name}`;
 
 const connectLinks = [
     ["Portfolio", "https://www.ashishranjan.net/", FiGlobe],
@@ -36,12 +36,26 @@ function LinkIcons({ links }) {
 function App() {
     const [count, setCount] = useState(0);
     const [showTop, setShowTop] = useState(false);
+    const [storageAvailable, setStorageAvailable] = useState(true);
+    const didCountPageView = useRef(false);
 
     useEffect(() => {
-        const currentViews = sessionStorage.getItem("page_view");
-        const nextViews = currentViews === null ? 1 : Number(currentViews) + 1;
-        sessionStorage.setItem("page_view", String(nextViews));
-        setCount(nextViews);
+        if (didCountPageView.current) return;
+        didCountPageView.current = true;
+
+        try {
+            const storedViews = Number(sessionStorage.getItem("page_view"));
+            const currentViews =
+                Number.isSafeInteger(storedViews) && storedViews >= 0
+                    ? storedViews
+                    : 0;
+            const nextViews =
+                currentViews < Number.MAX_SAFE_INTEGER ? currentViews + 1 : 1;
+            sessionStorage.setItem("page_view", String(nextViews));
+            setCount(nextViews);
+        } catch {
+            setStorageAvailable(false);
+        }
     }, []);
     useEffect(() => {
         const updateTopButton = () => setShowTop(window.scrollY > 420);
@@ -51,7 +65,17 @@ function App() {
     }, []);
 
     const refreshCount = () => {
-        setCount(Number(sessionStorage.getItem("page_view") || 0));
+        try {
+            const storedViews = Number(sessionStorage.getItem("page_view"));
+            setCount(
+                Number.isSafeInteger(storedViews) && storedViews >= 0
+                    ? storedViews
+                    : 0
+            );
+            setStorageAvailable(true);
+        } catch {
+            setStorageAvailable(false);
+        }
     };
 
     return (
@@ -72,13 +96,13 @@ function App() {
                         <p className="intro">This small React app stores a page-view value in sessionStorage. Reloads in the same tab update the count, while a new session starts fresh.</p>
                         <div className="heroActions">
                             <button className="primaryButton" type="button" onClick={refreshCount}><FiRefreshCw aria-hidden="true" /> Read session value</button>
-                            <span className="storageNote"><FiEye aria-hidden="true" /> Stored locally in this tab</span>
+                            <span className="storageNote"><FiEye aria-hidden="true" />{storageAvailable ? " Stored locally in this tab" : " Session storage is unavailable"}</span>
                         </div>
                     </div>
                     <div className="countCard" aria-live="polite">
                         <FiEye aria-hidden="true" />
                         <span className="count">{count}</span>
-                        <span className="countLabel">page views this session</span>
+                        <span className="countLabel">{storageAvailable ? "page views this session" : "Enable session storage to count page views"}</span>
                     </div>
                 </section>
 

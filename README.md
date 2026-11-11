@@ -11,22 +11,24 @@ A responsive React page-view counter that persists inside the current browser ta
 
 ## Tech stack
 
-React, Create React App, JavaScript, sessionStorage, and react-icons.
+React, Vite, JavaScript, sessionStorage, and react-icons.
 
 ## Run locally
 
 ```bash
 npm install
-npm start
+npm run dev
 ```
 
-Build with `npm run build` and deploy with `npm run deploy`.
+Build with `npm run build` and deploy to GitHub Pages with `npm run deploy`.
 
-## Live
+## Demo
 
 [Open the Session Storage React demo](https://a2rp.github.io/session-storage-reactjs/)
 
 ![Session Storage React preview](screenshot.png)
+
+The counter is scoped to the current browser tab. Closing the tab ends its session; it does not track visitors across browsers or provide analytics.
 
 ## Links
 
